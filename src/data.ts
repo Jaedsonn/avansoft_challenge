@@ -17,7 +17,14 @@ export default class DataRepository implements IDataSource {
         throw new Error("Student already exists");
       }
       this.dataSource.push(student);
-      return { success: true, message: "Student saved successfully" };
+      return {
+        success: true,
+        message: "Student saved successfully",
+        data: {
+          ...student,
+          firstNotRepeatableChar: findFirstNotRepeatableChar(student.name),
+        },
+      };
     } catch (error) {
       return {
         success: false,

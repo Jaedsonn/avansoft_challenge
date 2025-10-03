@@ -1,4 +1,4 @@
-export function FindFirstNotRepeatableCharacter(str: string){
+export function findFirstNotRepeatableChar(str: string){
     str = str.toLowerCase();
     const charCount: Record<string, number> = {};
 

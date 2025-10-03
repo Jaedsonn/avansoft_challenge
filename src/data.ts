@@ -1,66 +1,78 @@
-import { Student, DefaultMessage } from "./types/definition"
+import { Student, DefaultMessage } from "./types/definition";
+import { findFirstNotRepeatableChar } from "@utils/firstNotRepeatableChar";
 
-interface IDataSource{
-    save: (student: Student) => DefaultMessage;
-    getAll: () => DefaultMessage;
-    getById: (id: string) => DefaultMessage;
+interface IDataSource {
+  save: (student: Student) => DefaultMessage;
+  getAll: () => DefaultMessage;
+  getById: (id: string) => DefaultMessage;
 }
 
-export default class DataRepository implements IDataSource{
+export default class DataRepository implements IDataSource {
+  constructor(private readonly dataSource: Student[] = []) {}
 
-    constructor(
-        private readonly dataSource: Student[] = []
-    ){}
-    
-    public save(student: Student) {
-        try {
-            const isExist = this.verifyExistence(student.name);
-            if(isExist){
-                throw new Error("Student already exists");
-            }
-            this.dataSource.push(student);
-            return { success: true, message: "Student saved successfully" };
-        } catch (error) {
-            return { success: false, message: error.message || "Failed to save student" };
-        }
+  public save(student: Student) {
+    try {
+      const isExist = this.verifyExistence(student.name);
+      if (isExist) {
+        throw new Error("Student already exists");
+      }
+      this.dataSource.push(student);
+      return { success: true, message: "Student saved successfully" };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message || "Failed to save student",
+      };
     }
+  }
 
-    public getAll(){
-        try {
-            const students = this.dataSource;
-            return { success: true, message: "Students retrieved successfully", data: students };
-        } catch (error) {
-            return { success: false, message: "Failed to retrieve students" };
-        }
+  public getAll() {
+    try {
+      const students = this.dataSource.map((s) => ({
+        ...s,
+        firstNotRepeatableChar: findFirstNotRepeatableChar(s.name),
+      }));
+      return {
+        success: true,
+        message: "Students retrieved successfully",
+        data: students,
+      };
+    } catch (error) {
+      return { success: false, message: "Failed to retrieve students" };
     }
+  }
 
-    public getById(id: string) {
-        try {
-            const student = this.dataSource.find(s => s.id === id);
-            if (student) {
-                return { success: true, message: "Student retrieved successfully", data: student };
-            } else {
-                throw new Error("Student not found");
-            }
-        } catch (error) {
-            return { success: false, message: error.message };
-        }  
+  public getById(id: string) {
+    try {
+      const student = this.dataSource.find((s) => s.id === id);
+      if (student) {
+        return {
+          success: true,
+          message: "Student retrieved successfully",
+          data: {
+            ...student,
+            firstNotRepeatableChar: findFirstNotRepeatableChar(student.name),
+          },
+        };
+      } else {
+        throw new Error("Student not found");
+      }
+    } catch (error) {
+      return { success: false, message: error.message };
     }
+  }
 
-    private verifyExistence(name: string){
-        const student = this.dataSource.find(
-            s => s.name.trim().toLowerCase() === name.trim().toLowerCase()
-        );
+  private verifyExistence(name: string) {
+    const student = this.dataSource.find(
+      (s) => s.name.trim().toLowerCase() === name.trim().toLowerCase()
+    );
 
-        if(student){
-            return true;
-        } else{
-            return false;
-        }
+    if (student) {
+      return true;
+    } else {
+      return false;
     }
-        
+  }
 }
 
 export const dataSource: Student[] = [];
-
-

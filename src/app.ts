@@ -1,5 +1,5 @@
 import express from "express";
-import { StudentRouter } from "@router/student.routes";
+import { StudentRouter } from "./routes/student.routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;

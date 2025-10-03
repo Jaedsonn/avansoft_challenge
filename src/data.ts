@@ -1,5 +1,5 @@
 import { Student, DefaultMessage } from "./types/definition";
-import { findFirstNotRepeatableChar } from "@utils/firstNotRepeatableChar";
+import { findFirstNotRepeatableChar } from "./utils/firstNotRepeatableChar";
 import { randomUUID } from "node:crypto";
 
 interface IDataSource {

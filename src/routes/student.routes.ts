@@ -1,5 +1,5 @@
 import { Router } from "express";
-import Factory from "factory";
+import Factory from "../factory";
 
 export const StudentRouter = Router();
 

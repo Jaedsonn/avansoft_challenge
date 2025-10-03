@@ -1,5 +1,6 @@
 import { Student, DefaultMessage } from "./types/definition";
 import { findFirstNotRepeatableChar } from "@utils/firstNotRepeatableChar";
+import { randomUUID } from "node:crypto";
 
 interface IDataSource {
   save: (student: Student) => DefaultMessage;
@@ -8,7 +9,18 @@ interface IDataSource {
 }
 
 export default class DataRepository implements IDataSource {
-  constructor(private readonly dataSource: Student[] = []) {}
+  private static instance: DataRepository;
+  
+  private constructor(
+    private readonly dataSource: Student[] = [],
+  ) {}
+
+  public static getInstance() {
+    if (!this.instance) {
+      this.instance = new DataRepository();
+    }
+    return this.instance;
+  }
 
   public save(student: Student) {
     try {
@@ -16,13 +28,19 @@ export default class DataRepository implements IDataSource {
       if (isExist) {
         throw new Error("Student already exists");
       }
-      this.dataSource.push(student);
+      const studentWithId = {
+        ...student,
+        id: randomUUID(),
+      };
+      this.dataSource.push(studentWithId);
       return {
         success: true,
         message: "Student saved successfully",
         data: {
-          ...student,
-          firstNotRepeatableChar: findFirstNotRepeatableChar(student.name),
+          ...studentWithId,
+          firstNotRepeatableChar: findFirstNotRepeatableChar(
+            studentWithId.name
+          ),
         },
       };
     } catch (error) {
@@ -81,5 +99,4 @@ export default class DataRepository implements IDataSource {
     }
   }
 }
-
 export const dataSource: Student[] = [];

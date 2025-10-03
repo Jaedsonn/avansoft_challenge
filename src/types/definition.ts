@@ -2,7 +2,7 @@ import * as z from "zod";
 import { randomUUID } from "node:crypto";
 
 export const StudentSchema = z.object({
-  id: z.uuid().default(randomUUID()).optional().readonly(),
+  id: z.uuid().default(() => randomUUID()),
   name: z.string().min(1, "Name is required"),
   grade: z
     .number()

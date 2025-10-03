@@ -13,4 +13,8 @@ export class StudentService{
     public findAll(){
         return this.dataRepository.getAll();
     }
+
+    public findById(id: string){
+        return this.dataRepository.getById(id);
+    }
 }

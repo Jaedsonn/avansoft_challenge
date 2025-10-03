@@ -10,7 +10,7 @@ interface IDataSource {
 
 export default class DataRepository implements IDataSource {
   private static instance: DataRepository;
-  
+
   private constructor(
     private readonly dataSource: Student[] = [],
   ) {}
@@ -43,7 +43,7 @@ export default class DataRepository implements IDataSource {
           ),
         },
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
         success: false,
         message: error.message || "Failed to save student",
@@ -62,7 +62,7 @@ export default class DataRepository implements IDataSource {
         message: "Students retrieved successfully",
         data: students,
       };
-    } catch (error) {
+    } catch (error: any) {
       return { success: false, message: "Failed to retrieve students" };
     }
   }
@@ -82,7 +82,7 @@ export default class DataRepository implements IDataSource {
       } else {
         throw new Error("Student not found");
       }
-    } catch (error) {
+    } catch (error: any) {
       return { success: false, message: error.message };
     }
   }

@@ -18,7 +18,7 @@ export class StudentController {
     } catch (error: any) {
       if (error instanceof ZodError) {
         const errorMessages = JSON.parse(error.message).map(
-          (err) => err.message
+          (err: { message: any; }) => err.message
         );
         return res.status(400).json({
           success: false,
@@ -37,7 +37,7 @@ export class StudentController {
     try {
       const students = this.studentService.findAll();
       return res.status(200).json(students);
-    } catch (error) {
+    } catch (error: any) {
       return res.status(500).json({
         success: false,
         message: error.message || "Internal Server Error",
@@ -56,7 +56,7 @@ export class StudentController {
       } else {
         return res.status(404).json(result);
       }
-    } catch (error) {
+    } catch (error: any) {
       return res.status(500).json({
         success: false,
         message: error.message || "Internal Server Error",

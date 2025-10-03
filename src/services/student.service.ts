@@ -9,4 +9,8 @@ export class StudentService{
     public save(student: Student){
         return this.dataRepository.save(student);
     }
+
+    public findAll(){
+        return this.dataRepository.getAll();
+    }
 }

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { StudentService } from "@services/student.service";
-import { Student, StudentSchema } from "../types/definition";
+import { StudentSchema } from "../types/definition";
 
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
@@ -11,7 +11,9 @@ export class StudentController {
       const result = this.studentService.save(parsed);
       res.status(201).json(result);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res
+        .status(400)
+        .json({ success: false, message: error.message || "Bad Request" });
     }
   };
 
@@ -29,18 +31,15 @@ export class StudentController {
 
   public getStudentById = (req: Request, res: Response) => {
     try {
-        const id = req.params?.id;
-        if(!id) throw new Error("ID is required");
-        const student = this.studentService.findById(id);
-        return res.status(200).json(student);
-        
+      const id = req.params?.id;
+      if (!id) throw new Error("ID is required");
+      const student = this.studentService.findById(id);
+      return res.status(200).json(student);
     } catch (error) {
-      return res
-        .status(500)
-        .json({
-          success: false,
-          message: error.message || "Internal Server Error",
-        });
+      return res.status(500).json({
+        success: false,
+        message: error.message || "Internal Server Error",
+      });
     }
   };
 }

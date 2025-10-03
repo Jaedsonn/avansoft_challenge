@@ -12,13 +12,6 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "baseUrl": "./src",
-    "paths": {
-      "@utils/*": ["utils/*"],
-      "@controllers/*": ["controllers/*"],
-      "@services/*": ["services/*"],
-      "@types/*": ["types/*"],
-      "@router/*": ["routes/*"]
-    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,

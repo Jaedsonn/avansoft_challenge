@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { StudentService } from "@services/student.service";
+import { StudentService } from "../services/student.service";
 import { StudentSchema } from "../types/definition";
+import { ZodError } from "zod";
 
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
@@ -15,18 +16,18 @@ export class StudentController {
         res.status(400).json(result);
       }
     } catch (error: any) {
-      if (error.name === "ZodError") {
-        const errorMessages = error.errors
-          .map((err: any) => err.message)
-          .join(", ");
-        res.status(400).json({
+      if (error instanceof ZodError) {
+        const errorMessages = JSON.parse(error.message).map(
+          (err) => err.message
+        );
+        return res.status(400).json({
           success: false,
           message: errorMessages,
         });
       } else {
-        res.status(400).json({
+        return res.status(400).json({
           success: false,
-          message: error.message || "Bad Request",
+          message: JSON.stringify(error.message) || "Bad Request",
         });
       }
     }

@@ -14,10 +14,14 @@ export default class DataRepository implements IDataSource{
     
     public save(student: Student) {
         try {
+            const isExist = this.verifyExistence(student.name);
+            if(isExist){
+                throw new Error("Student already exists");
+            }
             this.dataSource.push(student);
             return { success: true, message: "Student saved successfully" };
         } catch (error) {
-            return { success: false, message: "Failed to save student" };
+            return { success: false, message: error.message || "Failed to save student" };
         }
     }
 
@@ -40,8 +44,21 @@ export default class DataRepository implements IDataSource{
             }
         } catch (error) {
             return { success: false, message: error.message };
+        }  
+    }
+
+    private verifyExistence(name: string){
+        const student = this.dataSource.find(
+            s => s.name.trim().toLowerCase() === name.trim().toLowerCase()
+        );
+
+        if(student){
+            return true;
+        } else{
+            return false;
         }
     }
+        
 }
 
 export const dataSource: Student[] = [];

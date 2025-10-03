@@ -131,8 +131,8 @@ Para cada estudante, é necessário encontrar a primeira letra do nome que não 
 
 ### Solução Implementada
 
-O algoritmo utilizado é baseado em na estrutura Map, onde criamos o registro do Map caracter por caracter e depois acessamos ele para incrementar sua ocorrência na string
-, após isso basta ver os caracteres que tiveram ocorrência 1 já que o Map já estará ordenado pela ordem que o inserimos no Map
+O algoritmo utilizado é baseado na estrutura Map, onde criamos o registro do Map caracter por caracter e depois acessamos ele para incrementar sua ocorrência na string
+, após isso basta ver os caracteres que tiveram ocorrência 1 percorrendo novamente o array. Esse é a melhor solução para esse problema além da utilização do REGEX para fazer essa busca em texto
 
 ```typescript
 export function findFirstNotRepeatableChar(str: string) {

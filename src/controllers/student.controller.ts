@@ -9,11 +9,26 @@ export class StudentController {
     try {
       const parsed = StudentSchema.parse(req.body);
       const result = this.studentService.save(parsed);
-      res.status(201).json(result);
-    } catch (error) {
-      res
-        .status(400)
-        .json({ success: false, message: error.message || "Bad Request" });
+      if (result.success) {
+        res.status(201).json(result);
+      } else {
+        res.status(400).json(result);
+      }
+    } catch (error: any) {
+      if (error.name === "ZodError") {
+        const errorMessages = error.errors
+          .map((err: any) => err.message)
+          .join(", ");
+        res.status(400).json({
+          success: false,
+          message: errorMessages,
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: error.message || "Bad Request",
+        });
+      }
     }
   };
 
@@ -33,8 +48,13 @@ export class StudentController {
     try {
       const id = req.params?.id;
       if (!id) throw new Error("ID is required");
-      const student = this.studentService.findById(id);
-      return res.status(200).json(student);
+      const result = this.studentService.findById(id);
+
+      if (result.success) {
+        return res.status(200).json(result);
+      } else {
+        return res.status(404).json(result);
+      }
     } catch (error) {
       return res.status(500).json({
         success: false,
